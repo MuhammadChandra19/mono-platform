@@ -2,6 +2,7 @@ import { Authenticator, Maker } from "@packages/pkg/oauth";
 import { Usecase } from "@/usecases";
 import identityService from "./identity";
 import permissionService from './permission';
+import authService from './auth';
 
 type Deps = {
   usecases: Usecase;
@@ -20,9 +21,17 @@ const services = ({ usecases, authMaker, authenticator }: Deps) => {
     authenticator: authenticator,
   });
 
+  const auth = authService({
+    identityUsecase: usecases.identity,
+    permissionUsecase: usecases.permission,
+    maker: authMaker,
+    authenticator: authenticator,
+  });
+
   return {
     identity,
     permission,
+    auth,
   };
 };
 type Service = ReturnType<typeof services>;
