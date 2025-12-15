@@ -1,0 +1,24 @@
+{
+  "name": "mono-platform",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Muhammad Chandra Zulfikar",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "pnpm -r test",
+    "test:watch": "pnpm -r test:watch",
+    "test:coverage": "pnpm -r test:coverage"
+  },
+  "packageManager": "pnpm@9.4.0",
+  "engines": {
+    "node": ">=21"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "esbuild": "^0.21.4",
+    "jest": "^30.2.0",
+    "prettier": "^3.7.4"
+  }
+}

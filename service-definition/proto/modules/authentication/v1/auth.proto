@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package modules.authentication.v1;
+
+option go_package = "modules/authentication/v1;authenticationv1";
+
+import "core/v1/annotations.proto";
+import "openapiv3/annotations.proto";
+import "google/api/annotations.proto";
+
+import "modules/authentication/v1/shared/auth.proto";
+
+option (openapi.v3.document) = {
+  info : {
+    title : "Auth Service",
+    version: "v1"
+  }
+  components : {
+    security_schemes : {
+      additional_properties : {
+        name : "OAuth2"
+        value : {
+          security_scheme : {
+            type : "http",
+            scheme : "bearer"
+            bearer_format : "JWT"
+          }
+        }
+      }
+    }
+  }
+  security : {
+    additional_properties : {
+      name : "OAuth2"
+      value : {}
+    }
+  }
+};
+
+service AuthService {
+  option (core.v1.service_descriptor) = {
+    path_prefixes : {path : "/v1/auth"}
+  };
+
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/login",
+      body : "*"
+    };
+    option (openapi.v3.operation) = {
+      summary : "Logging in User by supported Authentication Factor"
+      description : "Logging in User by supported Authentication Factor, "
+                    "'password' for password login flow and 'otp_key' for "
+                    "passwordless login flow."
+    };
+  }
+}
+
+
+message LoginRequest {
+  string email = 1 [ (openapi.v3.property) = {
+    description : "User email"
+    example : {yaml : "john.fd@gmail.com"}
+  } ];
+
+  string password = 2
+      [ (openapi.v3.property) = {description : "User Password"} ];
+}
+
+message LoginResponse {
+  string message = 1
+      [ (openapi.v3.property) = {description : "additional information"} ];
+
+  modules.authentication.v1.shared.LoginEntity loginEntity = 2
+      [ (openapi.v3.property) = {description : "session information"} ];
+
+  string redirectTo = 3 [ (openapi.v3.property) = {
+    description : "url redirection when login is success or fail"
+  } ];
+}
+

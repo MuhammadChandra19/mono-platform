@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.v1;
+
+option go_package = "common/v1;commonv1";
+
+message Dict {
+  string key = 1;
+  string value = 2;
+}
+
+message KeyArrayValues {
+  string key = 1;
+  repeated Dict value = 2;
+}

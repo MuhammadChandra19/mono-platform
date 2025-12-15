@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package modules.authentication.v1.shared;
+
+option go_package = "modules/authentication/v1/shared;authenticationv1shared";
+
+// possible values of UserStatus
+enum UserStatus {
+  // Default user status. It will not be used.
+  USER_STATUS_UNSPECIFIED = 0;
+  // User status active
+  USER_STATUS_ACTIVE = 1;
+  // User status inactive
+  USER_STATUS_INACTIVE = 2;
+}
+
+/**
+ * Enums of role possible value
+ */
+enum RoleType {
+  USER = 0;
+}
+
+enum ActionType {
+  READ = 0;
+  WRITE = 1;
+  UPDATE = 2;
+  DELETE = 3;
+  SYSTEM = 4;
+}

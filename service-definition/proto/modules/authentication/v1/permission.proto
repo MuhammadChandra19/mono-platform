@@ -1,0 +1,173 @@
+syntax = "proto3";
+option go_package = "modules/authentication/v1;authenticationv1";
+package modules.authentication.v1.public;
+
+import "openapiv3/annotations.proto";
+import "core/v1/annotations.proto";
+import "google/api/annotations.proto";
+import "common/v1/meta.proto";
+import "modules/authentication/v1/shared/permission.proto";
+
+option (openapi.v3.document) = {
+  info : {title : "Skoola Permission Service" version : "v1"}
+  servers : [
+    {url : "https://staging-api.simbiosa.co.id"},
+    {url : "http://localhost:8080"}
+  ]
+
+  components : {
+    security_schemes : {
+      additional_properties : {
+        name : "OAuth2"
+        value : {
+          security_scheme : {
+            type : "http",
+            scheme : "bearer"
+            bearer_format : "JWT"
+          }
+        }
+      }
+    }
+  }
+  security : {
+    additional_properties : {
+      name: "OAuth2"
+      value: {}
+    }
+  }
+};
+
+service PermissionService {
+  option (core.v1.service_descriptor) = {
+    path_prefixes : {path : "/v1/permission"}
+  };
+  rpc AssignPermission(AssignUserPermissionRequest) returns (AssignUserPermissionResponse) {
+    option (google.api.http) = {
+      post : "/v1/permission/assign"
+      body : "*"
+    };
+    option (openapi.v3.operation) = {
+      summary : "Assign Permission"
+      description : "Assign a permission to a user or role."
+      security: {
+        additional_properties: {
+          name: "OAuth2"
+          value: {
+            value: [
+              "write:permission"
+            ]
+          }
+        }
+      }
+    };
+  }
+
+  rpc RevokePermission(RevokePermissionRequest) returns (RevokePermissionResponse) {
+    option (google.api.http) = {
+      post : "/v1/permission/revoke"
+      body : "*"
+    };
+    option (openapi.v3.operation) = {
+      summary : "Revoke Permission"
+      description : "Revoke a permission from a user or role."
+      security: {
+        additional_properties: {
+          name: "OAuth2"
+          value: {
+            value: [
+              "delete:permission"
+            ]
+          }
+        }
+      }
+    };
+  }
+
+  rpc GetUserPermissions(GetUserPermissionsRequest) returns (GetUserPermissionsResponse) {
+    option (google.api.http) = {
+      get : "/v1/permission/user/{user_id}"
+    };
+    option (openapi.v3.operation) = {
+      summary : "Get User Permissions"
+      description : "Retrieve all permissions assigned to a specific user."
+      security: {
+        additional_properties: {
+          name: "OAuth2"
+          value: {
+            value: [
+              "read:permission"
+            ]
+          }
+        }
+      }
+    };
+  }
+}
+
+message AssignUserPermissionRequest {
+  // id of user
+  string userId = 1;
+  // id of rule to be assigned
+  repeated string permissionIds = 2;
+}
+
+message AssignUserPermissionResponse {
+  // message if permission is assigned to user
+  string message = 1;
+}
+
+message RevokePermissionRequest {
+  // id of user
+  string userId = 1 [
+    (openapi.v3.property) = {
+      description: "ID of the user from whom the permission will be revoked"
+      example: {
+        yaml: "user-id-12345"
+      }
+    }
+  ];
+  // id of rule to be revoked
+  string permissionId = 2 [
+    (openapi.v3.property) = {
+      description: "ID of the permission to be revoked"
+      example: {
+        yaml: "permission-id-12345"
+      }
+    }
+  ];
+}
+
+message RevokePermissionResponse {
+  // message if permission is successfully revoked from user
+  string message = 1 [
+    (openapi.v3.property) = {
+      description: "Message indicating the result of the revoke operation"
+    }
+  ];
+}
+
+message GetUserPermissionsRequest {
+  string userId = 1 [
+    (openapi.v3.property) = {
+      description: "ID of the user whose permissions are to be retrieved"
+      example: {
+        yaml: "user-id-12345"
+      }
+    }
+  ];
+}
+
+message GetUserPermissionsResponse {
+  // user permissions data
+  repeated modules.authentication.v1.shared.UserPermission userPermissions = 1 [
+    (openapi.v3.property) = {
+      description: "List of permissions assigned to the user"
+    }
+  ];
+  // metadata
+  common.v1.ResponseMetadata meta = 2 [
+    (openapi.v3.property) = {
+      description: "Metadata about the response"
+    }
+  ];
+}

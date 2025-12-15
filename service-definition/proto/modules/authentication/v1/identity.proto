@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package modules.authentication.v1;
+
+option go_package = "modules/authentication/v1;authenticationv1";
+
+import "openapiv3/annotations.proto";
+import "modules/authentication/v1/shared/identity.proto";
+import "core/v1/annotations.proto";
+import "google/api/annotations.proto";
+
+// Global definition for openapi-v3
+option (openapi.v3.document) = {
+  info: {
+    title: "Identity Service"
+    version: "v1"
+  }
+};
+
+service IdentityService {
+  option (core.v1.service_descriptor) = {
+    path_prefixes: {
+      path: "/v1/identity"
+    }
+  };
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/v1/identity/register",
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Register New User"
+      description: "register new user."
+    };
+  }
+}
+
+// Request body of Register new user
+message RegisterRequest {
+  string fullname = 1 [
+    (openapi.v3.property) = {
+      description: "User full name"
+      example: {
+        yaml: "John F. Doe"
+      }
+    }
+  ];
+  string phoneNumber = 2 [
+    (openapi.v3.property) = {
+      description: "User phone number"
+      example: {
+        yaml: "+628790909321"
+      }
+    }
+  ];
+  string username = 3 [
+    (openapi.v3.property) = {
+      description: "Username"
+    }
+  ];
+  string email = 4 [
+    (openapi.v3.property) = {
+      description: "User email"
+      example: {
+        yaml: "john.fd@gmail.com"
+      }
+    }
+  ];
+
+  string password = 5 [
+    (openapi.v3.property) = {
+      description: "User Password"
+    }
+  ];
+  string loginChallenge = 6 [
+    (openapi.v3.property) = {
+      description: " login challenge from auth-server"
+    }
+  ];
+}
+
+// Response body of Register new user
+message RegisterResponse {
+  string message = 1 [
+    (openapi.v3.property) = {
+      description: "additional message"
+    }
+  ];
+  modules.authentication.v1.shared.User user = 2[
+    (openapi.v3.property) = {
+      description: "registered user information"
+    }
+  ];
+  string token = 3 [
+    (openapi.v3.property) = {
+      description: "generated token after registered"
+    }
+  ];
+  string refreshToken = 4 [
+    (openapi.v3.property) = {
+      description: "refresh token for the user"
+    }
+  ];
+}

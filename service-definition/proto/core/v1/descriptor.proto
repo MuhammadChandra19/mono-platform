@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package core.v1;
+
+option go_package = "core/v1;corev1";
+
+import "common/v1/error.proto";
+
+// Error represents gRPC error
+message Error {
+  message Details { repeated common.v1.ErrorInfo detail = 1; } // a message wrapping error infos
+
+  uint32 grpc_code = 1; // grpc code of the error
+  Details details = 2; // containing error infos
+}
+
+// MethodDescriptor represents annotation on the methods of a protobuf RPC service that consists of several protobuf metadata used in Skoola.
+message MethodDescriptor {
+  ErrorCodes error_codes = 1; // possible error code that might be occurred when consuming the service method
+  ErrorExamples error_examples = 2; // some examples for the error codes returned from the method
+  Security security = 3; // service security options
+  Permission permission = 4; // custom method descriptor to document necessary permission
+}
+
+// ServiceDescriptor represents annotation on the protobuf RPC service that consists of several protobuf metadata used in Skoola.
+message ServiceDescriptor {
+  // all possible error codes that might be returned from the service.
+  ErrorCodes possible_error_codes = 1;
+  // error codes that are common to all methods inside a service,
+  // so no need to redefine in the method level
+  ErrorCodes common_error_codes = 2;
+  // some examples of the error codes defined in the service
+  ErrorExamples error_examples = 3;
+  // path configurations that will be used by API Gateway for routing requests to the domains.
+  PathPrefixes path_prefixes = 4;
+  // operation type of the API, e.g. "buka_api", or a "partner_webhook",
+  // to tell when to enforce API standard
+  string operation_type = 5;
+}
+
+// ErrorExamples represents repeated examples of errors
+message ErrorExamples { repeated Error error = 1; }
+
+// ErrorCodes represents repeated error of codes
+message ErrorCodes { repeated string code = 1; }
+
+// Security represents service security options.
+// This is needed to differentiate between user token and client token
+message Security {
+  // specify type of accepted token
+  // possible values: user, client
+  string token_type = 1;
+  // whether this endpoint requires token introspection 
+  // https://datatracker.ietf.org/doc/html/rfc7662
+  bool introspected = 2;
+}
+
+// Permission represents custom method descriptor to document necessary
+// permission required to do certain action on a resource in a domain.
+message Permission {
+  string domain = 1; // domain which belongs to this method
+  string resource = 2; // resource that is to be accessed
+  string action = 3; // permission action, e.g. create, list, read, delete
+}
+
+/* PathPrefixes represents a path configurations for the service.
+ * It will be used by API Gateway for routing configuration. */
+message PathPrefixes { repeated string path = 1; }
+
+

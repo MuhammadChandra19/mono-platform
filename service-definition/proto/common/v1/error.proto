@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package common.v1;
+
+option go_package = "common/v1;commonv1";
+
+message ErrorInfo {
+  string message = 1;
+  string code = 2;
+  string field = 3;
+  string info = 4;
+}
+
+message ErrorResponse {
+  repeated ErrorInfo errors = 1;
+}

@@ -1,0 +1,186 @@
+syntax = "proto3";
+
+import "modules/authentication/v1/shared/enumeration.proto";
+import "google/protobuf/timestamp.proto";
+import "openapiv3/annotations.proto";
+package modules.authentication.v1.shared;
+
+option go_package = "modules/authentication/v1/shared;authenticationv1shared";
+
+
+// User entity
+message User {
+  string id = 1 [
+    (openapi.v3.property) = {
+      description: "User ID"
+      example: {
+        yaml: "123"
+      }
+    }
+  ];
+  string fullname = 2 [
+    (openapi.v3.property) = {
+      description: "User full name"
+      example: {
+        yaml: "John F. Doe"
+      }
+    }
+  ];
+  string username = 3 [
+    (openapi.v3.property) = {
+      description: "User username"
+      example: {
+        yaml: "JohnFD"
+      }
+    }
+  ];
+  string phoneNumber = 4 [
+    (openapi.v3.property) = {
+      description: "User phone number"
+      example: {
+        yaml: "+628790909321"
+      }
+    }
+  ];
+  string email = 5 [
+    (openapi.v3.property) = {
+      description: "User email"
+      example: {
+        yaml: "john.fd@gmail.com"
+      }
+    }
+  ];
+
+  string profilePic = 6 [
+    (openapi.v3.property) = {
+      description: "User profile pict name"
+      example: {
+        yaml: "profile.png"
+      }
+    }
+  ];
+
+
+  Address address = 7 [
+    (openapi.v3.property) = {
+      description: "User address"
+      example: {
+        yaml: "jln jln"
+      }
+    }
+  ];
+
+
+  Gender gender = 8 [
+    (openapi.v3.property) = {
+      description: "User gender"
+      example: {
+        yaml: "Male"
+      }
+    }
+  ];
+
+  google.protobuf.Timestamp dateOfBirth = 9 [
+    (openapi.v3.property) = {
+      description: "User Date of Birth"
+      example: {
+        yaml: "2020-01-01"
+      }
+    }
+  ];
+
+  string placeOfBirth = 10 [
+    (openapi.v3.property) = {
+      description: "User Place of Birth"
+      example: {
+        yaml: "Jakarta"
+      }
+    }
+  ];
+
+  modules.authentication.v1.shared.RoleType roleType = 11;
+  
+  modules.authentication.v1.shared.UserStatus status = 97 [
+    (openapi.v3.property) = {
+      description: "Represent user status"
+    }
+  ];
+
+  google.protobuf.Timestamp createdAt = 98 [
+    (openapi.v3.property) = {
+      description: "Time when user is created"
+      example: {
+        yaml: "2020-01-01T00:00:00Z"
+      }
+    }
+  ];
+
+  google.protobuf.Timestamp updatedAt = 99 [
+    (openapi.v3.property) = {
+      description: "Time when user data updated"
+      example: {
+        yaml: "2020-01-01T00:00:00Z"
+      }
+    }
+  ];
+}
+
+enum Gender {
+  // Unspecified gender
+  GENDER_UNSPECIFIED = 0;
+  // Male gender
+  MALE = 1;
+  // Female gender
+  FEMALE = 2;
+}
+
+/**
+ * Represents user's address
+ */
+message Address {
+  string addressLine1 = 1 [
+    (openapi.v3.property) = {
+      description: "address detail"
+    }
+  ]; // address detail
+  string addressLine2 = 2 [
+    (openapi.v3.property) = {
+      description: "address detail"
+    }
+  ]; // address detail
+  string administrativeAreaLevel1 = 3 [
+    (openapi.v3.property) = {
+      description: "province / provinsi"
+    }
+  ]; // province / provinsi
+  string administrativeAreaLevel2 = 4 [
+    (openapi.v3.property) = {
+      description: "city / kota"
+    }
+  ]; // city / kota
+  string administrativeAreaLevel3 = 5 [
+    (openapi.v3.property) = {
+      description: "area / kecamatan"
+    }
+  ]; // area / kecamatan
+  string administrativeAreaLevel4 = 6 [
+    (openapi.v3.property) = {
+      description: "district / kelurahan"
+    }
+  ]; // district / kelurahan
+  string postalCode = 7 [
+    (openapi.v3.property) = {
+      description: "postal code / kode pos"
+    }
+  ]; // postal code / kode pos
+  string latitude = 8 [
+    (openapi.v3.property) = {
+      description: "stored latitude coordinate in decimal"
+    }
+  ]; // stored latitude coordinate in decimal
+  string longitude = 9 [
+    (openapi.v3.property) = {
+      description: "stored longitude coordinate in decimal"
+    }
+  ]; // stored longitude coordinate in decimal
+}

@@ -1,0 +1,41 @@
+syntax = "proto3";
+package modules.authentication.v1.shared;
+option go_package = "modules/authentication/v1/shared;authenticationv1shared";
+import "google/protobuf/timestamp.proto";
+import "openapiv3/annotations.proto";
+
+message Permission {
+  // id
+  string id = 1 [
+    (openapi.v3.property) = {
+      description: "permisson id"
+      example: {
+        yaml: "write:permission"
+      }
+    }
+  ];
+  // action
+  string action = 2;
+  // resource name
+  string resourceName = 3;
+
+  // display name
+  string description = 4;
+
+  // when permission is created
+  google.protobuf.Timestamp createdAt = 98;
+  // when permission is updated
+  google.protobuf.Timestamp updatedAt = 99;
+}
+
+message UserPermission {
+  // id
+  string id = 1;
+  string userId = 2;
+  string permissionId = 3;
+  string createdBy = 4;
+  // when role is created
+  google.protobuf.Timestamp createdAt = 98;
+  // when role is updated
+  google.protobuf.Timestamp updatedAt = 99;
+}

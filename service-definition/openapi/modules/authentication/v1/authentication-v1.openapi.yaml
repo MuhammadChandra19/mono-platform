@@ -1,0 +1,586 @@
+# Generated with gnostic protoc-gen-openapi
+{
+  openapi: 3.0.3,
+  info:
+    {
+      title: Authentication v1,
+      version: v1,
+      description: "Identity Service, Auth Service, Skoola Permission Service",
+    },
+  paths:
+    {
+      /v1/identity/register:
+        {
+          post:
+            {
+              tags: [IdentityService],
+              summary: Register New User,
+              description: register new user.,
+              operationId: IdentityService_Register,
+              requestBody:
+                {
+                  content:
+                    {
+                      application/json:
+                        {
+                          schema:
+                            { $ref: "#/components/schemas/RegisterRequest" },
+                        },
+                    },
+                  required: true,
+                },
+              responses:
+                {
+                  "200":
+                    {
+                      description: OK,
+                      content:
+                        {
+                          application/json:
+                            {
+                              schema:
+                                {
+                                  $ref: "#/components/schemas/RegisterResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+      /v1/auth/login:
+        {
+          post:
+            {
+              tags: [AuthService],
+              summary: Logging in User by supported Authentication Factor,
+              description: "Logging in User by supported Authentication Factor, 'password' for password login flow and 'otp_key' for passwordless login flow.",
+              operationId: AuthService_Login,
+              requestBody:
+                {
+                  content:
+                    {
+                      application/json:
+                        {
+                          schema: { $ref: "#/components/schemas/LoginRequest" },
+                        },
+                    },
+                  required: true,
+                },
+              responses:
+                {
+                  "200":
+                    {
+                      description: OK,
+                      content:
+                        {
+                          application/json:
+                            {
+                              schema:
+                                { $ref: "#/components/schemas/LoginResponse" },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+      /v1/permission/assign:
+        {
+          post:
+            {
+              tags: [PermissionService],
+              summary: Assign Permission,
+              description: Assign a permission to a user or role.,
+              operationId: PermissionService_AssignPermission,
+              requestBody:
+                {
+                  content:
+                    {
+                      application/json:
+                        {
+                          schema:
+                            {
+                              $ref: "#/components/schemas/AssignUserPermissionRequest",
+                            },
+                        },
+                    },
+                  required: true,
+                },
+              responses:
+                {
+                  "200":
+                    {
+                      description: OK,
+                      content:
+                        {
+                          application/json:
+                            {
+                              schema:
+                                {
+                                  $ref: "#/components/schemas/AssignUserPermissionResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+              security: [{ OAuth2: ["write:permission"] }],
+            },
+        },
+      /v1/permission/revoke:
+        {
+          post:
+            {
+              tags: [PermissionService],
+              summary: Revoke Permission,
+              description: Revoke a permission from a user or role.,
+              operationId: PermissionService_RevokePermission,
+              requestBody:
+                {
+                  content:
+                    {
+                      application/json:
+                        {
+                          schema:
+                            {
+                              $ref: "#/components/schemas/RevokePermissionRequest",
+                            },
+                        },
+                    },
+                  required: true,
+                },
+              responses:
+                {
+                  "200":
+                    {
+                      description: OK,
+                      content:
+                        {
+                          application/json:
+                            {
+                              schema:
+                                {
+                                  $ref: "#/components/schemas/RevokePermissionResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+              security: [{ OAuth2: ["delete:permission"] }],
+            },
+        },
+      "/v1/permission/user/{user_id}":
+        {
+          get:
+            {
+              tags: [PermissionService],
+              summary: Get User Permissions,
+              description: Retrieve all permissions assigned to a specific user.,
+              operationId: PermissionService_GetUserPermissions,
+              parameters:
+                [
+                  {
+                    name: user_id,
+                    in: path,
+                    required: true,
+                    schema: { type: string },
+                  },
+                  { name: userId, in: query, schema: { type: string } },
+                ],
+              responses:
+                {
+                  "200":
+                    {
+                      description: OK,
+                      content:
+                        {
+                          application/json:
+                            {
+                              schema:
+                                {
+                                  $ref: "#/components/schemas/GetUserPermissionsResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+              security: [{ OAuth2: ["read:permission"] }],
+            },
+        },
+    },
+  "components":
+    {
+      "schemas":
+        {
+          Address:
+            {
+              type: object,
+              properties:
+                {
+                  addressLine1: { type: string, description: address detail },
+                  addressLine2: { type: string, description: address detail },
+                  administrativeAreaLevel1:
+                    { type: string, description: province / provinsi },
+                  administrativeAreaLevel2:
+                    { type: string, description: city / kota },
+                  administrativeAreaLevel3:
+                    { type: string, description: area / kecamatan },
+                  administrativeAreaLevel4:
+                    { type: string, description: district / kelurahan },
+                  postalCode:
+                    { type: string, description: postal code / kode pos },
+                  latitude:
+                    {
+                      type: string,
+                      description: stored latitude coordinate in decimal,
+                    },
+                  longitude:
+                    {
+                      type: string,
+                      description: stored longitude coordinate in decimal,
+                    },
+                },
+              description: "*\n Represents user's address",
+            },
+          RegisterRequest:
+            {
+              type: object,
+              properties:
+                {
+                  fullname:
+                    {
+                      example: John F. Doe,
+                      type: string,
+                      description: User full name,
+                    },
+                  phoneNumber:
+                    {
+                      example: +628790909321,
+                      type: string,
+                      description: User phone number,
+                    },
+                  username: { type: string, description: Username },
+                  email:
+                    {
+                      example: john.fd@gmail.com,
+                      type: string,
+                      description: User email,
+                    },
+                  password: { type: string, description: User Password },
+                  loginChallenge:
+                    {
+                      type: string,
+                      description: " login challenge from auth-server",
+                    },
+                },
+              description: Request body of Register new user,
+            },
+          RegisterResponse:
+            {
+              type: object,
+              properties:
+                {
+                  message: { type: string, description: additional message },
+                  user: { $ref: "#/components/schemas/User" },
+                  token:
+                    {
+                      type: string,
+                      description: generated token after registered,
+                    },
+                  refreshToken:
+                    { type: string, description: refresh token for the user },
+                },
+              description: Response body of Register new user,
+            },
+          User:
+            {
+              type: object,
+              properties:
+                {
+                  id: { example: 123, type: string, description: User ID },
+                  fullname:
+                    {
+                      example: John F. Doe,
+                      type: string,
+                      description: User full name,
+                    },
+                  username:
+                    {
+                      example: JohnFD,
+                      type: string,
+                      description: User username,
+                    },
+                  phoneNumber:
+                    {
+                      example: +628790909321,
+                      type: string,
+                      description: User phone number,
+                    },
+                  email:
+                    {
+                      example: john.fd@gmail.com,
+                      type: string,
+                      description: User email,
+                    },
+                  profilePic:
+                    {
+                      example: profile.png,
+                      type: string,
+                      description: User profile pict name,
+                    },
+                  address: { $ref: "#/components/schemas/Address" },
+                  gender:
+                    {
+                      example: Male,
+                      enum: [GENDER_UNSPECIFIED, MALE, FEMALE],
+                      type: string,
+                      description: User gender,
+                      format: enum,
+                    },
+                  dateOfBirth:
+                    {
+                      example: 2020-01-01,
+                      type: string,
+                      description: User Date of Birth,
+                      format: date-time,
+                    },
+                  placeOfBirth:
+                    {
+                      example: Jakarta,
+                      type: string,
+                      description: User Place of Birth,
+                    },
+                  roleType: { enum: [USER], type: string, format: enum },
+                  status:
+                    {
+                      enum:
+                        [
+                          USER_STATUS_UNSPECIFIED,
+                          USER_STATUS_ACTIVE,
+                          USER_STATUS_INACTIVE,
+                        ],
+                      type: string,
+                      description: Represent user status,
+                      format: enum,
+                    },
+                  createdAt:
+                    {
+                      example: "2020-01-01T00:00:00Z",
+                      type: string,
+                      description: Time when user is created,
+                      format: date-time,
+                    },
+                  updatedAt:
+                    {
+                      example: "2020-01-01T00:00:00Z",
+                      type: string,
+                      description: Time when user data updated,
+                      format: date-time,
+                    },
+                },
+              description: User entity,
+            },
+          "ErrorInfo":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "message": { "title": "message", "type": "string" },
+                  "code": { "title": "code", "type": "string" },
+                  "field": { "title": "field", "type": "string" },
+                  "info": { "title": "info", "type": "string" },
+                },
+            },
+          "ErrorResponse":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "errors":
+                    {
+                      "title": "errors",
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/ErrorInfo" },
+                    },
+                },
+            },
+          LoginEntity:
+            {
+              type: object,
+              properties:
+                {
+                  sessionToken: { type: string },
+                  refreshToken: { type: string },
+                },
+              description: Login entity,
+            },
+          LoginRequest:
+            {
+              type: object,
+              properties:
+                {
+                  email:
+                    {
+                      example: john.fd@gmail.com,
+                      type: string,
+                      description: User email,
+                    },
+                  password: { type: string, description: User Password },
+                },
+            },
+          LoginResponse:
+            {
+              type: object,
+              properties:
+                {
+                  message:
+                    { type: string, description: additional information },
+                  loginEntity: { $ref: "#/components/schemas/LoginEntity" },
+                  redirectTo:
+                    {
+                      type: string,
+                      description: url redirection when login is success or fail,
+                    },
+                },
+            },
+          AssignUserPermissionRequest:
+            {
+              type: object,
+              properties:
+                {
+                  userId: { type: string, description: id of user },
+                  permissionIds:
+                    {
+                      type: array,
+                      items: { type: string },
+                      description: id of rule to be assigned,
+                    },
+                },
+            },
+          AssignUserPermissionResponse:
+            {
+              type: object,
+              properties:
+                {
+                  message:
+                    {
+                      type: string,
+                      description: message if permission is assigned to user,
+                    },
+                },
+            },
+          CursorPagination:
+            {
+              type: object,
+              properties:
+                {
+                  limit: { type: integer, format: uint32 },
+                  nextCursor: { type: string },
+                  prevCursor: { type: string },
+                  currCursor: { type: string },
+                },
+            },
+          GetUserPermissionsResponse:
+            {
+              type: object,
+              properties:
+                {
+                  userPermissions:
+                    {
+                      type: array,
+                      items: { $ref: "#/components/schemas/UserPermission" },
+                      description: List of permissions assigned to the user,
+                    },
+                  meta:
+                    {
+                      allOf:
+                        [{ $ref: "#/components/schemas/ResponseMetadata" }],
+                      description: Metadata about the response,
+                    },
+                },
+            },
+          OffsetPagination:
+            {
+              type: object,
+              properties:
+                {
+                  limit: { type: integer, format: uint32 },
+                  offset: { type: integer, format: uint32 },
+                  total: { type: integer, format: uint32 },
+                },
+            },
+          ResponseMetadata:
+            {
+              type: object,
+              properties:
+                {
+                  offsetPagination:
+                    { $ref: "#/components/schemas/OffsetPagination" },
+                  cursorPagination:
+                    { $ref: "#/components/schemas/CursorPagination" },
+                },
+            },
+          RevokePermissionRequest:
+            {
+              type: object,
+              properties:
+                {
+                  userId:
+                    {
+                      example: user-id-12345,
+                      type: string,
+                      description: ID of the user from whom the permission will be revoked,
+                    },
+                  permissionId:
+                    {
+                      example: permission-id-12345,
+                      type: string,
+                      description: ID of the permission to be revoked,
+                    },
+                },
+            },
+          RevokePermissionResponse:
+            {
+              type: object,
+              properties:
+                {
+                  message:
+                    {
+                      type: string,
+                      description: Message indicating the result of the revoke operation,
+                    },
+                },
+            },
+          UserPermission:
+            {
+              type: object,
+              properties:
+                {
+                  id: { type: string, description: id },
+                  userId: { type: string },
+                  permissionId: { type: string },
+                  createdBy: { type: string },
+                  createdAt:
+                    {
+                      type: string,
+                      description: when role is created,
+                      format: date-time,
+                    },
+                  updatedAt:
+                    {
+                      type: string,
+                      description: when role is updated,
+                      format: date-time,
+                    },
+                },
+            },
+        },
+      securitySchemes:
+        { OAuth2: { type: http, scheme: bearer, bearerFormat: JWT } },
+    },
+  security: [{ OAuth2: [] }],
+  servers:
+    [
+      { url: "https://staging-api.simbiosa.co.id" },
+      { url: "http://localhost:8080" },
+    ],
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package core.v1;
+
+option go_package = "core/v1;corev1";
+
+import "google/protobuf/descriptor.proto";
+import "core/v1/descriptor.proto";
+
+extend google.protobuf.ServiceOptions {
+  core.v1.ServiceDescriptor service_descriptor = 1041;
+}
+
+extend google.protobuf.MethodOptions {
+  core.v1.MethodDescriptor method_descriptor = 1041;
+}

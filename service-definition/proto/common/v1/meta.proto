@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+// Contain shared proto message that is not related to business logic
+package common.v1;
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/v1;commonv1";
+
+message ResponseMetadata {
+  OffsetPagination offsetPagination = 1;
+  CursorPagination cursorPagination = 2;
+}
+
+message OffsetPagination {
+  uint32 limit = 1;
+  uint32 offset = 2;
+  uint32 total = 3;
+}
+
+message CursorPagination {
+  uint32 limit = 1;
+  string nextCursor = 2;
+  string prevCursor = 3;
+  string currCursor = 4;
+}

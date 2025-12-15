@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package modules.authentication.v1.shared;
+
+option go_package = "modules/authentication/v1/shared;authenticationv1shared";
+
+// Login entity
+message LoginEntity {
+  string sessionToken = 2;  
+  string refreshToken = 3;
+}
