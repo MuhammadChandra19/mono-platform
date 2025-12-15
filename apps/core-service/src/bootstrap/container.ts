@@ -14,7 +14,7 @@ import {
   createJWTMaker,
   Maker,
 } from "@packages/pkg/oauth";
-import { IdentityServiceApiRouterHandler } from "@packages/openapigen";
+import { IdentityServiceApiRouterHandler, PermissionServiceApiRouterHandler } from "@packages/openapigen";
 import { Hono } from "hono";
 import { setupSwaggerDocs } from "@/utils/swagger";
 import { loggerMiddleware } from "@/utils/middleware/logger";
@@ -78,6 +78,7 @@ export class Container {
     this.services = services({
       usecases: this.usecases,
       authMaker: this.authMaker,
+      authenticator: this.authenticator,
     });
 
     this.registerRouteHandler();
@@ -85,6 +86,7 @@ export class Container {
 
   private registerRouteHandler() {
     new IdentityServiceApiRouterHandler(this.hono, this.services.identity, []);
+    new PermissionServiceApiRouterHandler(this.hono, this.services.permission, []);
 
     // Serve Swagger UI static files
     setupSwaggerDocs(this.hono);
