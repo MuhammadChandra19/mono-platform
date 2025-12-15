@@ -5,7 +5,9 @@ import { TransactionWrapper } from "@packages/pkg/postgres";
 import { createMockPermissionRepository } from "@/data/repositories/permission/__mocks__";
 
 describe("permissionUsecase", () => {
-  const mockTxWrapper: TransactionWrapper = jest.fn(async (fn) => await fn()) as any;
+  const mockTxWrapper: TransactionWrapper = jest.fn(
+    async (fn) => await fn(),
+  ) as any;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -62,29 +64,36 @@ describe("permissionUsecase", () => {
       },
     ];
 
-    test.each(testCases)("$name", async ({ userId, repoResult, expectedOk }) => {
-      const mockPermissionRepo = createMockPermissionRepository();
-      (mockPermissionRepo.getUserPermissions as jest.Mock).mockResolvedValue(repoResult);
+    test.each(testCases)(
+      "$name",
+      async ({ userId, repoResult, expectedOk }) => {
+        const mockPermissionRepo = createMockPermissionRepository();
+        (mockPermissionRepo.getUserPermissions as jest.Mock).mockResolvedValue(
+          repoResult,
+        );
 
-      const usecase = permissionUsecase({
-        permissionRepo: mockPermissionRepo,
-        txWrapper: mockTxWrapper,
-      });
+        const usecase = permissionUsecase({
+          permissionRepo: mockPermissionRepo,
+          txWrapper: mockTxWrapper,
+        });
 
-      const result = await usecase.getUserPermissions(userId);
+        const result = await usecase.getUserPermissions(userId);
 
-      expect(result.ok).toBe(expectedOk);
-      expect(mockPermissionRepo.getUserPermissions).toHaveBeenCalledWith(userId);
+        expect(result.ok).toBe(expectedOk);
+        expect(mockPermissionRepo.getUserPermissions).toHaveBeenCalledWith(
+          userId,
+        );
 
-      if (expectedOk && repoResult.ok) {
-        expect(result.ok && result.data).toEqual(repoResult.data);
-      } else if (!expectedOk && !repoResult.ok && repoResult.error) {
-        expect(result.ok).toBe(false);
-        if (!result.ok) {
-          expect(result.error.code).toBe(repoResult.error.code);
+        if (expectedOk && repoResult.ok) {
+          expect(result.ok && result.data).toEqual(repoResult.data);
+        } else if (!expectedOk && !repoResult.ok && repoResult.error) {
+          expect(result.ok).toBe(false);
+          if (!result.ok) {
+            expect(result.error.code).toBe(repoResult.error.code);
+          }
         }
-      }
-    });
+      },
+    );
   });
 
   describe("assignPermissionToUser", () => {
@@ -142,11 +151,10 @@ describe("permissionUsecase", () => {
         txWrapper: mockTxWrapper,
       });
 
-      const result = await usecase.assignPermissionToUser(
-        10,
-        "admin",
-        ["read:user", "write:user"],
-      );
+      const result = await usecase.assignPermissionToUser(10, "admin", [
+        "read:user",
+        "write:user",
+      ]);
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -365,9 +373,9 @@ describe("permissionUsecase", () => {
         (mockPermissionRepo.createPermission as jest.Mock).mockResolvedValue(
           createPermissionResult,
         );
-        (mockPermissionRepo.createUserPermission as jest.Mock).mockResolvedValue(
-          createUserPermissionResult,
-        );
+        (
+          mockPermissionRepo.createUserPermission as jest.Mock
+        ).mockResolvedValue(createUserPermissionResult);
 
         const usecase = permissionUsecase({
           permissionRepo: mockPermissionRepo,
@@ -434,7 +442,9 @@ describe("permissionUsecase", () => {
       "$name",
       async ({ userId, permissionIds, repoResult, expectedOk }) => {
         const mockPermissionRepo = createMockPermissionRepository();
-        (mockPermissionRepo.deleteUserPermissions as jest.Mock).mockResolvedValue(repoResult);
+        (
+          mockPermissionRepo.deleteUserPermissions as jest.Mock
+        ).mockResolvedValue(repoResult);
 
         const usecase = permissionUsecase({
           permissionRepo: mockPermissionRepo,

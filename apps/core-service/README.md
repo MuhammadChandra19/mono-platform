@@ -45,6 +45,7 @@ apps/core-service/
 ## Features
 
 ### Authentication & Identity Management
+
 - User registration with password hashing (bcrypt)
 - JWT-based authentication with access & refresh tokens
 - Role-based access control (RBAC)
@@ -52,6 +53,7 @@ apps/core-service/
 - Email-based user lookup
 
 ### Permission Management
+
 - Fine-grained permission system (`action:resourceName` format)
 - User-permission assignment
 - Permission revocation
@@ -59,6 +61,7 @@ apps/core-service/
 - Transactional permission operations
 
 ### Security
+
 - Token-based authentication via Authorization header or cookies
 - Scope validation for API endpoints
 - ServiceResult pattern for consistent error handling
@@ -155,6 +158,7 @@ The project uses a comprehensive testing strategy:
 - **Mocks**: Centralized mock factories in `__mocks__` directories
 
 Example table-driven test:
+
 ```typescript
 const testCases = [
   {
@@ -213,7 +217,11 @@ All services return a consistent `ServiceResult<T>` type:
 ```typescript
 type ServiceResult<T> =
   | { ok: true; data: T; status?: StatusCode }
-  | { ok: false; error: { code: string; message: string; details?: any }; status: StatusCode };
+  | {
+      ok: false;
+      error: { code: string; message: string; details?: any };
+      status: StatusCode;
+    };
 ```
 
 ### Dependency Injection
@@ -234,6 +242,7 @@ const container = {
 Permissions follow the format: `${action}:${resourceName}`
 
 Examples:
+
 - `read:user`
 - `write:permission`
 - `delete:post`
@@ -273,4 +282,3 @@ Examples:
 ## License
 
 Proprietary - All rights reserved
-

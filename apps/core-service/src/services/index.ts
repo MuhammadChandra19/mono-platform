@@ -1,8 +1,8 @@
 import { Authenticator, Maker } from "@packages/pkg/oauth";
 import { Usecase } from "@/usecases";
 import identityService from "./identity";
-import permissionService from './permission';
-import authService from './auth';
+import permissionService from "./permission";
+import authService from "./auth";
 
 type Deps = {
   usecases: Usecase;

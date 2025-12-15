@@ -18,7 +18,7 @@ describe("permissionRepository", () => {
         resourceName: "user",
         createdAt: new Date(),
         updatedAt: new Date(),
-        description: null
+        description: null,
       };
 
       const mockDb = {
@@ -85,7 +85,7 @@ describe("permissionRepository", () => {
           resourceName: "user",
           createdAt: new Date(),
           updatedAt: new Date(),
-          description: null
+          description: null,
         },
         {
           id: "user:write",
@@ -93,7 +93,7 @@ describe("permissionRepository", () => {
           resourceName: "user",
           createdAt: new Date(),
           updatedAt: new Date(),
-          description: null
+          description: null,
         },
       ];
 
@@ -161,7 +161,7 @@ describe("permissionRepository", () => {
           resourceName: "user",
           createdAt: new Date(),
           updatedAt: new Date(),
-          description: null
+          description: null,
         },
       ];
 

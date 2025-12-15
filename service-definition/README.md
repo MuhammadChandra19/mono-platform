@@ -76,11 +76,9 @@ The authentication domain provides identity, authorization, and permission manag
 - **Identity Service** (`identity.proto`)
   - User registration
   - User profile management
-  
 - **Auth Service** (`auth.proto`)
   - User authentication
   - Token management
-  
 - **Permission Service** (`permission.proto`)
   - Role-based access control
   - Permission assignment
@@ -93,6 +91,7 @@ The authentication domain provides identity, authorization, and permission manag
 Generates OpenAPI YAML specifications from Protocol Buffer definitions.
 
 **Steps:**
+
 1. Runs `openapi-v3-generator.sh` - Converts `.proto` files to `.openapi.yaml`
 2. Runs `openapi-v3-merge.sh` - Merges multiple specs per module/version
 3. Runs `normalize-definition-name.sh` - Normalizes schema names
@@ -104,6 +103,7 @@ Generates OpenAPI YAML specifications from Protocol Buffer definitions.
 Generates TypeScript client code from OpenAPI specifications.
 
 **Steps:**
+
 1. Runs `generate-spec.sh` - Processes each module/version
 2. Uses OpenAPI Generator to create TypeScript clients
 3. Runs `move-shared-files.sh` - Organizes shared runtime files
@@ -111,6 +111,7 @@ Generates TypeScript client code from OpenAPI specifications.
 **Output:** `../packages/openapigen/src/modules/{module}/{version}/`
 
 **Generated Files:**
+
 - `apis/` - Service API implementations
 - `models/` - Type definitions
 - `client.ts` - Client configuration
@@ -121,6 +122,7 @@ Generates TypeScript client code from OpenAPI specifications.
 Generates interactive Swagger UI documentation for all API services.
 
 **Steps:**
+
 1. Scans OpenAPI YAML files
 2. Copies files to core-service public directory
 3. Generates swagger-initializer.js with API catalog
@@ -162,6 +164,7 @@ message RegisterRequest {
 ### Adding a New Service
 
 1. **Define the Service**
+
    ```bash
    # Create proto file
    touch proto/modules/{module}/v1/{service}.proto
@@ -173,6 +176,7 @@ message RegisterRequest {
    - Add OpenAPI documentation
 
 3. **Generate Code**
+
    ```bash
    make generate-openapi
    make generate-openapigen
@@ -198,6 +202,7 @@ message RegisterRequest {
 ### OpenAPI Generation
 
 The `openapi-v3-generator.sh` script:
+
 - Processes all `.proto` files in the proto directory
 - Extracts OpenAPI v3 annotations
 - Generates individual `.openapi.yaml` files
@@ -206,6 +211,7 @@ The `openapi-v3-generator.sh` script:
 ### TypeScript Client Generation
 
 The `generate-spec.sh` script:
+
 - Iterates through each module and version
 - Merges multiple OpenAPI specs per domain
 - Uses `openapi-generator-cli.jar` with `typescript-fetch` generator
@@ -219,6 +225,7 @@ The `generate-spec.sh` script:
 ### Documentation Generation
 
 The `generate-docs.js` script:
+
 - Recursively scans OpenAPI directory
 - Copies YAML files to docs directory
 - Generates Swagger UI initializer with multi-spec support
@@ -244,10 +251,10 @@ packages/openapigen/
 Import in your application:
 
 ```typescript
-import { 
+import {
   IdentityServiceApi,
   RegisterRequest,
-  RegisterResponse 
+  RegisterResponse,
 } from "@packages/openapigen";
 ```
 
@@ -267,6 +274,7 @@ Ensure `openapi-generator-cli.jar` is present in the root directory.
 ### Proto Compiler Issues
 
 Install protoc:
+
 ```bash
 # macOS
 brew install protobuf
@@ -278,6 +286,7 @@ apt-get install protobuf-compiler
 ### Generated Code Not Found
 
 Make sure to run generation commands in order:
+
 1. `make generate-openapi`
 2. `make generate-openapigen`
 

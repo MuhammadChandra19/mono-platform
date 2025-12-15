@@ -62,12 +62,18 @@ describe("authenticator.ts", () => {
         const ctx = createMockContext(); // No auth header
         const roleMap = { [UserRoleTypeEnum.User]: true };
 
-        const result = await authenticator.mustHaveScope(ctx, roleMap, "user:read");
+        const result = await authenticator.mustHaveScope(
+          ctx,
+          roleMap,
+          "user:read",
+        );
 
         expect(result.ok).toBe(false);
         if (!result.ok) {
           expect(result.error.code).toBe("UNAUTHORIZED");
-          expect(result.error.message).toBe("request unauthorized: failed to retrieve token");
+          expect(result.error.message).toBe(
+            "request unauthorized: failed to retrieve token",
+          );
           expect(result.status).toBe(401);
         }
       });
@@ -77,7 +83,11 @@ describe("authenticator.ts", () => {
         const ctx = createMockContext("Bearer invalid-token");
         const roleMap = { [UserRoleTypeEnum.User]: true };
 
-        const result = await authenticator.mustHaveScope(ctx, roleMap, "user:read");
+        const result = await authenticator.mustHaveScope(
+          ctx,
+          roleMap,
+          "user:read",
+        );
 
         expect(result.ok).toBe(false);
         if (!result.ok) {
@@ -102,7 +112,11 @@ describe("authenticator.ts", () => {
         const ctx = createMockContext(`Bearer ${token}`);
         const roleMap = { [UserRoleTypeEnum.User]: false };
 
-        const result = await authenticator.mustHaveScope(ctx, roleMap, "admin:delete");
+        const result = await authenticator.mustHaveScope(
+          ctx,
+          roleMap,
+          "admin:delete",
+        );
 
         expect(result.ok).toBe(false);
         if (!result.ok) {
@@ -200,12 +214,16 @@ describe("authenticator.ts", () => {
         const ctx = createMockContext();
         const roleMap = { [UserRoleTypeEnum.User]: true };
 
-        const result = await authenticator.mustHaveArrScopes(ctx, roleMap, ["user:read"]);
+        const result = await authenticator.mustHaveArrScopes(ctx, roleMap, [
+          "user:read",
+        ]);
 
         expect(result.ok).toBe(false);
         if (!result.ok) {
           expect(result.error.code).toBe("UNAUTHORIZED");
-          expect(result.error.message).toBe("request unauthorized: failed to retrieve token");
+          expect(result.error.message).toBe(
+            "request unauthorized: failed to retrieve token",
+          );
           expect(result.status).toBe(401);
         }
       });
@@ -226,7 +244,9 @@ describe("authenticator.ts", () => {
         const ctx = createMockContext(`Bearer ${token}`);
         const roleMap = { [UserRoleTypeEnum.User]: false };
 
-        const result = await authenticator.mustHaveArrScopes(ctx, roleMap, ["admin:delete"]);
+        const result = await authenticator.mustHaveArrScopes(ctx, roleMap, [
+          "admin:delete",
+        ]);
 
         expect(result.ok).toBe(false);
         if (!result.ok) {
