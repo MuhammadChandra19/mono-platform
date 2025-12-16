@@ -39,10 +39,11 @@ const authService = ({
         return toServiceError<LoginResponse>(result.error);
       }
 
-      const matchPassword = comparePassword(
+      const matchPassword = await comparePassword(
         params.loginRequest.password!,
         result.data.password!,
       );
+
       if (!matchPassword) {
         return toServiceError<LoginResponse>({
           code: "INVALID_CREDENTIALS",
