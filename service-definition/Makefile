@@ -16,3 +16,7 @@ generate-openapigen:
 	@generator/typescript/move-shared-files.sh
 generate-docs:
 	@node generator/swagger-ui/generate-docs.js
+
+run-generate-all: generate-openapi generate-openapigen generate-docs
+
+.PHONY: generate-openapi generate-openapigen generate-docs
