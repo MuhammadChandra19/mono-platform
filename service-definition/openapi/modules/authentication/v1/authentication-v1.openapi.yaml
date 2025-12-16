@@ -578,9 +578,5 @@
         { OAuth2: { type: http, scheme: bearer, bearerFormat: JWT } },
     },
   security: [{ OAuth2: [] }],
-  servers:
-    [
-      { url: "https://staging-api.simbiosa.co.id" },
-      { url: "http://localhost:8080" },
-    ],
+  servers: [{ url: "http://localhost:3000" }],
 }
