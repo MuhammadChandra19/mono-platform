@@ -1,7 +1,8 @@
 import initApp from "./bootstrap";
+import { setupSwaggerDocs } from "./utils/swagger";
 
 const app = initApp();
-
+setupSwaggerDocs(app);
 const server = Bun.serve({
   port: 3000,
   fetch: app.fetch,

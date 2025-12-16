@@ -20,7 +20,6 @@ import {
   PermissionServiceApiRouterHandler,
 } from "@packages/openapigen";
 import { Hono } from "hono";
-import { setupSwaggerDocs } from "@/utils/swagger";
 import { loggerMiddleware } from "@/utils/middleware/logger";
 
 /**
@@ -96,9 +95,6 @@ export class Container {
       [],
     );
     new AuthServiceApiRouterHandler(this.hono, this.services.auth, []);
-
-    // Serve Swagger UI static files
-    setupSwaggerDocs(this.hono);
   }
 
   /**
