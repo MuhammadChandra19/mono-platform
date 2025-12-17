@@ -1,4 +1,4 @@
-import initServices from '../../services';
+import initServices from "../../services";
 
 const { services } = initServices();
 
@@ -33,7 +33,7 @@ describe("Auth Service", () => {
             email: email,
             password: wrongPassword,
           },
-        })
+        }),
       ).rejects.toThrow();
     });
 
@@ -47,7 +47,7 @@ describe("Auth Service", () => {
             email: nonExistentEmail,
             password: password,
           },
-        })
+        }),
       ).rejects.toThrow();
     });
 
@@ -60,7 +60,7 @@ describe("Auth Service", () => {
             email: "",
             password: password,
           },
-        })
+        }),
       ).rejects.toThrow();
     });
 
@@ -73,7 +73,7 @@ describe("Auth Service", () => {
             email: email,
             password: "",
           },
-        })
+        }),
       ).rejects.toThrow();
     });
   });

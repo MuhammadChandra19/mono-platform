@@ -11,6 +11,7 @@ AWS Lambda → Hono App → Container (DI) → Service → Usecase → Repositor
 ```
 
 **Key Principles:**
+
 - **Services** orchestrate HTTP requests, handle authentication, and format responses
 - **Usecases** contain business logic and manage transaction boundaries
 - **Repositories** abstract all data sources (databases, caches, external services)
@@ -80,6 +81,7 @@ docker-compose up -d
 ```
 
 This starts PostgreSQL on port 5433 with:
+
 - Database: `mono_platform`
 - User: `postgres`
 - Password: `password`
@@ -107,6 +109,7 @@ The server runs at `http://localhost:3000` with Swagger docs at `http://localhos
 Auto-generated TypeScript clients and server handlers from OpenAPI specifications. The Hono router handlers are generated via OpenAPI Generator from Protocol Buffer definitions.
 
 **Usage:**
+
 ```typescript
 import {
   IdentityServiceApiRouterHandler,
@@ -127,8 +130,12 @@ Shared utilities used across applications:
 - **logger/** - Winston logger configuration
 
 **Usage:**
+
 ```typescript
-import { createPostgresConnection, createTransactionWrapper } from "@packages/pkg/postgres";
+import {
+  createPostgresConnection,
+  createTransactionWrapper,
+} from "@packages/pkg/postgres";
 import { createJWTMaker, createAuthenticator } from "@packages/pkg/oauth";
 ```
 
@@ -190,6 +197,7 @@ pnpm deploy
 ```
 
 This runs:
+
 1. `esbuild` - Bundles the application for Node 20
 2. `zip` - Creates `lambda.zip`
 3. `aws lambda update-function-code` - Deploys to Lambda
@@ -198,27 +206,30 @@ This runs:
 
 ## Technology Stack
 
-| Component | Technology |
-|-----------|------------|
-| Runtime | AWS Lambda / Bun (local) |
-| Framework | Hono |
-| ORM | Drizzle ORM |
-| Database | PostgreSQL |
-| Authentication | JWT (custom implementation) |
-| API Spec | OpenAPI (generated from Protocol Buffers) |
-| Language | TypeScript |
-| Package Manager | pnpm |
-| Bundler | esbuild |
+| Component       | Technology                                |
+| --------------- | ----------------------------------------- |
+| Runtime         | AWS Lambda / Bun (local)                  |
+| Framework       | Hono                                      |
+| ORM             | Drizzle ORM                               |
+| Database        | PostgreSQL                                |
+| Authentication  | JWT (custom implementation)               |
+| API Spec        | OpenAPI (generated from Protocol Buffers) |
+| Language        | TypeScript                                |
+| Package Manager | pnpm                                      |
+| Bundler         | esbuild                                   |
 
 ## Architecture Layers
 
 ### Service Layer
+
 Services act as HTTP orchestrators. They handle authentication checks, coordinate usecases, and format responses. Services do not contain business logic.
 
 ### Usecase Layer
+
 Usecases contain the actual business logic. They manage transaction boundaries using `transactionWrapper` and call repositories for data access. Each usecase method represents a single business operation.
 
 ### Repository Layer
+
 Repositories are the data access layer. They abstract all data sources including databases, caches, and external services. Repositories return `DatabaseResult<T>` types for consistent error handling.
 
 ## Testing
